@@ -14,7 +14,7 @@ export default function Root() {
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <Body>
+      <Body class="bg-indigo-700">
         <Suspense>
           <ErrorBoundary>
             <Routes>
