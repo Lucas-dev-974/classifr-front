@@ -15,6 +15,9 @@ export default function Root() {
       </Head>
 
       <Body class="bg-indigo-700">
+        <div class="w-full text-center absolute atop-2">
+          <A href="/" class="text-center text-white tracking-[.20em]">ClassiFR</A>
+        </div>
         <Suspense>
           <ErrorBoundary>
             <Routes>
