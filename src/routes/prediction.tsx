@@ -1,15 +1,22 @@
-import { createSignal, Show } from "solid-js";
+import { createSignal, For, Show } from "solid-js";
 import SelectModel from "~/components/select_model";
+import { pushNotif } from "~/store/signaux";
 
 export default function Prediction() {
-    var file: any = null
+    var file: any  = null
+    var image_area = null
+    var img_before = null
+
     const [on, setOn] = createSignal('predict')
 
     const predict = () =>{
       if(file === null){
-        console.error('Désoler un fichier est attendue !')
+        pushNotif({
+          message: 'Désoler veuillez sélectionner une image avant de faire une prédiction !'
+        })
       }else{
-        console.log('ok can do prediction')
+        let lbl_prediction = document.getElementById('prediction_label')
+        lbl_prediction!.innerHTML = 'Le résultat de la prédiction'
         setOn('predicted')
       }
     }
@@ -20,9 +27,10 @@ export default function Prediction() {
      
     const handleImage = (e: object) => {
       const reader = new FileReader()
-      const image_area = document.getElementById('selected_img')
+      image_area = document.getElementById('selected_img')
 
       reader.onload = (e) => {
+        img_before = image_area.outerHTML
         image_area!.innerHTML = ''
         const image = new Image()
 
@@ -46,7 +54,13 @@ export default function Prediction() {
     const nextPrediction = () => {
       setOn('predict')
       file = null
-      
+      image_area.style.backgroundImage = ''
+      image_area.innerHTML = img_before
+
+    }
+
+    const getClasses = () => {
+      return ['Tacos', 'Hamburger', 'Pizza']
     }
 
     return (
@@ -61,12 +75,18 @@ export default function Prediction() {
 
             <div class="flex justify-center mt-2">
                 <label style="width: 250px; height: 250px" class="flex justify-center transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
-                    <div class="flex items-center space-x-2" id="selected_img">
+                    <div class="flex items-center space-x-2 mx-auto" id="selected_img">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#929292" d="M7 17h10q.3 0 .45-.275t-.05-.525l-2.75-3.675q-.15-.2-.4-.2t-.4.2L11.25 16L9.4 13.525q-.15-.2-.4-.2t-.4.2l-2 2.675q-.2.25-.05.525T7 17Zm-2 4q-.825 0-1.413-.588T3 19V5q0-.825.588-1.413T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.588 1.413T19 21H5Z"/></svg>
                     </div>
                     <input type="file" name="file_upload" class="hidden" accept="image/png, image/jpg, image/jpeg " onChange={handleImage}/>
                 </label>
             </div>
+
+            <div id="prediction_label" class="w-full text-center mx-auto m-5 text-white">
+
+            </div>
+
+
             <div class="w-full flex justify-center flex-wrap">
               <Show when={on() == 'predict'}>
                 
@@ -88,15 +108,17 @@ export default function Prediction() {
                   Si mauvaise prédiction veuillez sélectionner la catégorie qui aurais du être prédite
                 </div>
 
-                <div class="w-4/5 bg-[#7D6ADE] rounded-lg relative top-12 " style='height: 134px'>
-                  fe
+                <div class="bg-[#7D6ADE] rounded-lg relative  flex flex-wrap justify-around" style='height: 134px; max-width: 600px; min-width: 250px'>
+                  <For each={getClasses()}>{(classe, i) => 
+                    <button type="button" class="w-40 h-10 justify-center text-white  bg-[#3A2798] font-medium rounded-lg text-sm  p-1 my-2 mx-3">{classe}</button>
+                  }</For>
                 </div>
               </Show>
 
             </div>
 
             <div class="w-full flex justify-center mt-20" style='bottom: 0'>
-              <button type="button" onClick={predict} class="w-64 justify-center text-white  bg-[#7D6ADE] font-medium rounded-lg text-sm px-5 py-2.5 mt-4">Prédiction suivante</button>
+              <button type="button" onClick={nextPrediction} class="w-60 justify-center text-white  bg-[#7D6ADE] font-medium rounded-lg text-sm  px-5 py-2.5 mt-4">Prédiction suivante</button>
             </div>
         </section>
       </main>
