@@ -32,3 +32,4 @@ export const [trainClassesSelect, setTrainClassesSelect] = createStore([]);
 
 // Models 
 export const [models, setModels] = createStore([])
+export const [selectedModel, setSelectModel] = createStore({})
