@@ -66,7 +66,13 @@ export default function Prediction() {
     return (
       <main class="lg:container relative mx-auto">
         <section class="w-full"> {/** Selection modèle */}
-            <SelectModel />
+          <div class="mt-10">
+            <p class="text-center text-white text-xl">Sélectionner un modèle</p>
+            <div class="flex justify-center mx-auto mt-3" style="max-width: 450px">
+              <SelectModel />
+            </div>
+          </div>
+            
 
             <div id="televersement_image" class="w-full  relative mt-10">
               <h3 class="w-full text-xl	text-center text-white">Téléverser une image</h3>
