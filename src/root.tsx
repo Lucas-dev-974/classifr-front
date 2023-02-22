@@ -22,7 +22,7 @@ export default function Root() {
       </Head>
 
       <Body class="bg-[#2b2a66]">
-        <div class="w-full text-center text-xl flex justify-center items-center">
+        <div class="w-full text-center text-xl flex justify-center items-center" style="height: 64px">
           <A href="/" class="text-center text-white tracking-[.20em]">ClassiFR</A>
         </div>
 
