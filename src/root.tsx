@@ -21,8 +21,8 @@ export default function Root() {
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <Body class="bg-indigo-700" id="main">
-        <div class="w-full text-center text-xl flex justify-center items-center" style="height: 64px">
+      <Body class="bg-[#2b2a66]">
+        <div class="w-full text-center text-xl flex justify-center items-center">
           <A href="/" class="text-center text-white tracking-[.20em]">ClassiFR</A>
         </div>
 
