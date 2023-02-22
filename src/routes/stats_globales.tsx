@@ -60,7 +60,6 @@ export default function Stats_globales() {
             <div class="flex justify-center">
                 <a class="p-3 text-white bg-[#7D6ADE] rounded" type="button" href="/stats_modele">Statistiques par modèles</a>
             </div>
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         </main>
     )
 }

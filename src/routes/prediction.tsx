@@ -3,9 +3,9 @@ import SelectModel from "~/components/select_model";
 import { pushNotif } from "~/store/signaux";
 
 export default function Prediction() {
-    var file: any  = null
-    var image_area = null
-    var img_before = null
+    var file: File;
+    var image_area: HTMLElement;
+    var img_before: HTMLElement;
 
     const [on, setOn] = createSignal('predict')
 
@@ -27,7 +27,7 @@ export default function Prediction() {
      
     const handleImage = (e: object) => {
       const reader = new FileReader()
-      image_area = document.getElementById('selected_img')
+      image_area = document.getElementById('selected_img') ?? document.createElement('div')
 
       reader.onload = (e) => {
         img_before = image_area.outerHTML
@@ -55,7 +55,7 @@ export default function Prediction() {
       setOn('predict')
       file = null
       image_area.style.backgroundImage = ''
-      image_area.innerHTML = img_before
+      image_area.innerHTML = img_before 
 
     }
 
@@ -82,9 +82,8 @@ export default function Prediction() {
                 </label>
             </div>
 
-            <div id="prediction_label" class="w-full text-center mx-auto m-5 text-white">
-
-            </div>
+            
+            <div id="prediction_label" class="text-center m-5 text-white"></div>
 
 
             <div class="w-full flex justify-center flex-wrap">
