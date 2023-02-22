@@ -26,3 +26,7 @@ export const removeNotif = (notifid: number) => {
     console.log('okokok', notifid)
     setNotif((items: any) => items.filter((item: any) => item.id !== notifid));
 } 
+
+
+
+export const [trainClassesSelect, setTrainClassesSelect] = createStore([]);
