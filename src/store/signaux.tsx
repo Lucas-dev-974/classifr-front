@@ -27,6 +27,8 @@ export const removeNotif = (notifid: number) => {
     setNotif((items: any) => items.filter((item: any) => item.id !== notifid));
 } 
 
-
-
+// Classes
 export const [trainClassesSelect, setTrainClassesSelect] = createStore([]);
+
+// Models 
+export const [models, setModels] = createStore([])
