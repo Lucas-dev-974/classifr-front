@@ -59,10 +59,7 @@ export default function Prediction() {
 
     }
 
-    const getClasses = () => {
-      return ['Tacos', 'Hamburger', 'Pizza']
-    }
-
+    
     return (
       <main class="lg:container relative mx-auto">
         <section class="w-full"> {/** Selection modèle */}
