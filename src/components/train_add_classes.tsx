@@ -1,5 +1,8 @@
 import { createResource, For } from "solid-js";
 import { trainClassesSelect, setTrainClassesSelect } from "~/store/signaux"
+
+
+
 const fetchClasses = async () => (await fetch(`http://localhost:8000/api/classes`)).json();
 
 export default function ChooseClasses(){
