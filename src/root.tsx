@@ -3,6 +3,7 @@ import { createSignal, For, onMount, Suspense } from "solid-js";
 import { useLocation, A, Body, ErrorBoundary, FileRoutes, Head, Html, Meta, Routes, Scripts, Title } from "solid-start";
 
 import "./root.css";
+// import 'tw-elements';
 
 import {user, setUser} from "./store/signaux";
 import Notification from "./components/notification";
@@ -40,6 +41,9 @@ export default function Root() {
         </Suspense>
 
         <Scripts />
+
+        <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
+        
       </Body>
 
     </Html>
