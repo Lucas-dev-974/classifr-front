@@ -15,7 +15,7 @@ export const  pushNotif = (__notif: any) => {
     const notif = {
         id:      notifs().length + 1,
         message: __notif.message,
-        color:   __notif.color
+        color:   __notif.color ?? 'blue'
     }
 
     

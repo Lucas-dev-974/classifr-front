@@ -43,6 +43,12 @@ export default function Prediction() {
       }
     }
 
+    const nextPrediction = () => {
+      setOn('predict')
+      file = null
+      
+    }
+
     return (
       <main class="lg:container relative mx-auto">
         <section class="w-full"> {/** Selection modèle */}
