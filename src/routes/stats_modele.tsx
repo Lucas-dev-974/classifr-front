@@ -207,11 +207,22 @@ export default function Stats_modele() {
             </div>
         )
     }
+
+    function ClassCard(props:any){
+        return (
+            <div class="bg-[#7D6ADE] rounded-xl mx-auto">
+                <div class="flex flex-col px-2">
+                    <div class="text-white mx-auto">{props.class}</div>
+                    <div class="text-white mx-auto">{props.number} images</div>
+                </div>
+            </div>
+        )
+    }
     
     // Return de la page finale à charger
     return (
         <main class="sm:container mx-auto">
-            <div class="flex flex-col justify-center">
+            <div class="flex flex-col justify-center mx-auto">
                 <SelectModelCustom />
 
                 {/* Affichage des metrics */}
@@ -225,32 +236,46 @@ export default function Stats_modele() {
                     </div>
                 </div>
 
-                {/* Affichage des mauvaise prrédictions */}
+                {/* Affichage des mauvaise prrédictions  */}
                 <p class="text-center text-white text-2xl">Mauvaises prédictions</p>
                 <div class="grid grid-cols-3 mx-auto">
-                    <BadPredictionCard url="https://assets.afcdn.com/recipe/20210514/120317_w1024h1024c1cx1060cy707.jpg" reelleClasse="Pizza" prediction="Tarte aux pommes"/>
+                    <BadPredictionCard url="https://assets.afcdn.com/recipe/20210514/120317_w1024h1024c1cx1060cy707.jpg" reelleClasse="Pizza" prediction="Tacos"/>
                     <BadPredictionCard url="https://assets.afcdn.com/recipe/20130627/42230_w1024h1024c1cx1250cy1875.jpg" reelleClasse="Hamburger" prediction="Pizza"/>
-                    <BadPredictionCard url="https://static.750g.com/images/1200-675/a96d46e59b4f0ab8169c7cb0cb932a84/la-cuisson.jpg" reelleClasse="Tarte aux pommes" prediction="Hamburger"/>
+                    <BadPredictionCard url="https://img.cuisineaz.com/660x660/2019/04/17/i146583-tacos-poulet-curry.jpeg" reelleClasse="Tacos" prediction="Hamburger"/>
                 </div>
 
                 {/* Affichage des paramètres */}
                 <p class="text-center text-white text-2xl">Paramètres</p>
                 <div class="flex flex-col mx-auto">
-                    <div class="flex flex-wrap w-96">
-                        <div class="flex text-white">Learning-rate</div>
-                        <div class="flex text-white pl-5">0.001</div>
+                    <div class="relative w-96 h-6 border-b-2 border-white">
+                        <div class="absolute left-0 text-white">Learning-rate</div>
+                        <div class="absolute right-0 text-white">0.001</div>
                     </div>
-                    <div class="flex">
-                        <div class="text-white">Dropout</div>
-                        <div class="text-white">0.4</div>
+                    <div class="relative  w-96 h-6 border-b-2 border-white">
+                        <div class="absolute left-0 text-white">Dropout</div>
+                        <div class="absolute right-0 text-white">0.4</div>
                     </div>
-                    <div class="flex">
-                        <div class="text-white">Époques</div>
-                        <div class="text-white">18</div>
+                    <div class="relative  w-96 h-6 border-b-2 border-white">
+                        <div class="absolute left-0 text-white">Époques</div>
+                        <div class="absolute right-0 text-white">18</div>
                     </div>
+                </div>
+
                 {/* Affichage classes prédites */}
+                <p class="text-center text-white text-2xl my-3">Classes prédites</p>  
+                <div class="flex flex-wrap w-96 mx-auto">
+                    <ClassCard class="Tacos" number="1000"/>
+                    <ClassCard class="Hamburger" number="1000"/>
+                    <ClassCard class="Pizza" number="1000"/>
+                </div>
 
                 {/* Affichage boutton entrainement */}
+                <div class="flex justify-center mt-10">
+                    <a type="button" class="flex w-28 h-10 rounded-2xl bg-[#7D6ADE]" href="/entrainement">
+                        <div class="text-white m-auto">
+                            Entrainement
+                        </div>
+                    </a>
                 </div>
             </div>
         </main>
