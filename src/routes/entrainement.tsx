@@ -7,7 +7,10 @@ import { trainClassesSelect } from "~/store/signaux";
 
 
 export default function entrainement(){
-    
+    const train = () => {
+
+    }
+
     return <main class="pt-4 sm:container text-white mx-auto">
 
         <div class="px-10">
@@ -62,6 +65,9 @@ export default function entrainement(){
                 <p>Feedback de l'entrainement</p>
             </div>              
         </div>    
+        <div class="flex juitify-center w-full mx-auto absolute">
+            <button type="button" onClick={train} class="w-64 justify-center text-white  bg-[#7D6ADE] font-medium rounded-lg text-sm px-5 py-2.5 mt-4">Entrainer</button>
+        </div>
     </main>
 }
 const ar: Array<number> = []
