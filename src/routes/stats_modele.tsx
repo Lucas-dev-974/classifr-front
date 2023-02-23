@@ -10,9 +10,6 @@ import SelectModel from "~/components/select_model";
 
 // correction bug pas compris : https://github.com/sgratzl/chartjs-chart-wordcloud/issues/4
 import { registerables } from 'chart.js';
-import { List } from "postcss/lib/list";
-import { model } from "@tensorflow/tfjs";
-import { string } from "@tensorflow/tfjs-core";
 Chart.register(...registerables);
 //---------------------------------------
 
