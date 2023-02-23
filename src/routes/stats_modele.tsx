@@ -112,7 +112,7 @@ export default function Stats_modele() {
         )
     }
 
-    // Fonction permettant d'afficher les graphs metrics (1ère fois, après chargement de la page => "onMount")
+    // Affiche les graphs metrics (Accuracy & Loss)
     function handleGraph(chartId:string, type:string, dataTest:Array<number>, dataVal:Array<number>){
         const ctx = document.getElementById(chartId) as HTMLCanvasElement;
 
@@ -149,7 +149,7 @@ export default function Stats_modele() {
                         x: {
                             title: {
                                 display: true,
-                                text: type
+                                text: "Époques"
                             }
                         }
                     }
@@ -171,7 +171,7 @@ export default function Stats_modele() {
                         x: {
                             title: {
                                 display: true,
-                                text: type
+                                text: "Époques"
                             }
                         }
                     }
@@ -180,6 +180,35 @@ export default function Stats_modele() {
         }
         console.log(window.myChartA);
     } 
+
+    // Affiche le camemebert
+    function handlePieGraph(data:Array<number>){
+        const ctx = document.getElementById('pieChart') as HTMLCanvasElement;
+
+        // Création du graph
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Bonnes prédictions', 'Mauvaises prédictions'],
+                datasets: [{
+                    label: 'Prédictions',
+                    data: data,
+                    backgroundColor: [
+                        'rgb(54, 162, 235)',
+                        'rgb(213,0,5)'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: "white"
+                        }
+                    }
+                }
+            }});
+    }
 
     // Valeur par default => à améliorer : depend modèle par default défini par signal en global
     var defaultChartValueAT = [40, 59, 80, 81, 90, 92, 89];
@@ -191,6 +220,7 @@ export default function Stats_modele() {
     onMount(()=> {
         handleGraph("accuracyChart", "Accuracy", defaultChartValueAT , defaultChartValueAV); // Graph accuracy
         handleGraph("lossChart", "Loss", defaultChartValueLT, defaultChartValueLV); // Graph loss
+        handlePieGraph([90,10]);
     })
 
     // Permet d'afficher une card "Mauvaise prédiction"
@@ -198,7 +228,7 @@ export default function Stats_modele() {
         return (
             <div class="flex flex-col border-2 border-[#7D6ADE] rounded-xl sm:w-64 sm:p-2 mx-auto my-1 bg-[#7D6ADE] sm:m-2">
                 <div class="flex w-28 items-center m-auto sm:w-52 sm:m-auto">
-                    <img src={props.url} alt={props.reelleClasse}/>
+                    <img class="rounded-2xl" src={props.url} alt={props.reelleClasse}/>
                 </div>
                 <div>
                     <p>Prédiction: {props.prediction}</p>
@@ -228,6 +258,9 @@ export default function Stats_modele() {
                 {/* Affichage des metrics */}
                 <p class="text-center text-white text-2xl">Metrics</p>
                 <div class="flex flex-wrap">
+                    <div class="m-auto" style="width:250px; height:250px">
+                        <canvas class="m-2" id="pieChart"></canvas>
+                    </div>
                     <div class="m-auto" style="width:400px; height:200px">
                         <canvas class="bg-white m-2" id="accuracyChart"></canvas>
                     </div>
