@@ -1,5 +1,6 @@
 import { createSignal, onMount } from "solid-js"
 import { pushNotif } from "~/store/signaux";
+import { Formater } from "~/services";
 
 export default function AddModel(){
     const [modelName, setModelName] = createSignal('');
@@ -17,14 +18,12 @@ export default function AddModel(){
         if(checkForm() != ''){
             pushNotif({ message: checkForm() })
             return false
-        }
-        const formData = new FormData()
-        formData.append('name', modelName())
-        formData.append('file', file)
+        }   
 
-        let response = await fetch('http://localhost:8000/api/model/create', { method: 'POST', body: formData })
-        response = await response.json()
-        console.log(response)
+        const formdata = Formater({name: modelName(), file: file})
+
+        let response = await fetch('http://localhost:8000/api/model/create', { method: 'POST', body: formdat })
+        response     = await response.json()
         modal.hide()
     }
 
