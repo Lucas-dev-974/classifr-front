@@ -78,41 +78,10 @@ export default function Stats_modele() {
         }
     }
 
-    // Fonction permettant de récup et afficher la liste des modèles
-    function SelectModelCustom(){
-
-        // Récup liste des modèles via API
-        const getModels = async () => (await fetch ('http://localhost:8000/api/models')).json();
-        const [models] = createResource(getModels);
-
-        // Valeur toggle de séléction du modèle => modèle choisi
-        const [valeur, setValeur] = createSignal("1"); // içi valeur par défault => 1, doit dynammiquement dépendre du local storage
-
-        // Effect permettant de mettre à jour les infos de la page selon modèle choisi
-        let pass:number = 0 // Permet de ne pas update le graph inutilement dès le chargement de la page
-        createEffect(()=> {
-            console.log(valeur()) // A NE PAS SUPPR => permet à tout l'effect de fonctionner ! OU remplacer par équivalent !!!
-            if(pass==0){
-                pass = 1;
-            }
-            else{
-                dynamicGraph(valeur());
-                console.log(valeur(),"modifié")
-            }
-            // fcts permettant de modifier section "Mauvaise prédiction","Paramètre",... à mettre ici
-        })
-        
-        // Renvoie la liste des modèles dans le select
-        return (
-            <select value={valeur()} onInput={e=> setValeur(e.currentTarget.value)} id="countries" class="mx-auto w-6/12 bg-indigo-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 mx-auto p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <For each={models()}>{(model) =>
-                    <option value={model.id}>{model.name}</option>
-                }</For>
-            </select>
-        )
+    const handleModelSelection = (e: any) => {
+        dynamicGraph(e.target.value);
     }
-
-    // Affiche les graphs metrics (Accuracy & Loss)
+    // Affiche les graphs m etrics (Accuracy & Loss)
     function handleGraph(chartId:string, type:string, dataTest:Array<number>, dataVal:Array<number>){
         const ctx = document.getElementById(chartId) as HTMLCanvasElement;
 
@@ -253,7 +222,8 @@ export default function Stats_modele() {
     return (
         <main class="sm:container mx-auto">
             <div class="flex flex-col justify-center mx-auto">
-                <SelectModelCustom />
+                
+                <SelectModel _onchange={handleModelSelection} />
 
                 {/* Affichage des metrics */}
                 <p class="text-center text-white text-2xl">Metrics</p>
