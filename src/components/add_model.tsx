@@ -22,10 +22,7 @@ export default function AddModel(){
         formData.append('name', modelName())
         formData.append('file', file)
 
-        let response = await fetch('http://localhost:8000/api/model/create', {
-            method: 'POST',
-            body: formData
-        })
+        let response = await fetch('http://localhost:8000/api/model/create', { method: 'POST', body: formData })
         response = await response.json()
         console.log(response)
         modal.hide()
