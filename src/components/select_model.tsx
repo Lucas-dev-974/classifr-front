@@ -11,7 +11,7 @@ export default function SelectModel(props: any){
     }
 
     const handleChange = (e: any) => {
-      setSelectedModel(_models().filter(md => md.id == e.target.value)[0])
+      setSelectedModel(_models().filter((md:any) => md.id == e.target.value)[0])
       if(typeof(props._onchange) == 'function') props._onchange(e)
     }
 

@@ -1,4 +1,4 @@
-import { A } from "solid-start";
+// Page "Home"
 
 const buttonClass = "w-200 h-200 rounded-2xl p-8 m-3 bg-[#7D6ADE]";
 const buttonStyle = "width: 200px; height: 200px";

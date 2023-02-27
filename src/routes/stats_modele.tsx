@@ -2,7 +2,7 @@
 // TO-DO => Responsive à améliorer => qd mobile un seul graph combiné ;  Affichage mauvaises prédiction => seulement 2 images quand mobile
 //           Affichage des paramètres, classes prédites, bouton entrainement
 // Faire un flex nowrap pour les images prédictions
-
+//test refresh
 import { Chart } from "chart.js";
 import { onMount } from "solid-js";
 
