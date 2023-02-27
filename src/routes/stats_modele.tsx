@@ -5,7 +5,7 @@
 
 import { Chart } from "chart.js";
 import { onMount, createResource, For, createEffect, Switch, Match, createSignal } from "solid-js";
-import { Dynamic } from "solid-js/web";
+
 import SelectModel from "~/components/select_model";
 
 // correction bug pas compris : https://github.com/sgratzl/chartjs-chart-wordcloud/issues/4
@@ -79,6 +79,7 @@ export default function Stats_modele() {
     }
 
     const handleModelSelection = (e: any) => {
+        console.log(e)
         dynamicGraph(e.target.value);
     }
     // Affiche les graphs m etrics (Accuracy & Loss)
@@ -195,11 +196,11 @@ export default function Stats_modele() {
     // Permet d'afficher une card "Mauvaise prédiction"
     function BadPredictionCard(props:any){
         return (
-            <div class="flex flex-col border-2 border-[#7D6ADE] rounded-xl sm:w-64 sm:p-2 mx-auto my-1 bg-[#7D6ADE] sm:m-2">
-                <div class="flex w-28 items-center m-auto sm:w-52 sm:m-auto">
-                    <img class="rounded-2xl" src={props.url} alt={props.reelleClasse}/>
+            <div class="flex flex-col  rounded  w-64 md:w-48 lg:w-48  mx-auto my-1 bg-[#7D6ADE] mx-2">
+                <div class="flex w-full items-center m-auto  sm:m-auto">
+                    <img class="rounded" src={props.url} alt={props.reelleClasse}/>
                 </div>
-                <div>
+                <div class="p-2 text-white">
                     <p>Prédiction: {props.prediction}</p>
                     <p>Vrai: {props.reelleClasse}</p>
                 </div>
@@ -209,7 +210,7 @@ export default function Stats_modele() {
 
     function ClassCard(props:any){
         return (
-            <div class="bg-[#7D6ADE] rounded-xl mx-auto">
+            <div class="bg-[#7D6ADE] rounded mx-auto">
                 <div class="flex flex-col px-2">
                     <div class="text-white mx-auto">{props.class}</div>
                     <div class="text-white mx-auto">{props.number} images</div>
@@ -226,60 +227,73 @@ export default function Stats_modele() {
                 <SelectModel _onchange={handleModelSelection} />
 
                 {/* Affichage des metrics */}
-                <p class="text-center text-white text-2xl">Metrics</p>
-                <div class="flex flex-wrap">
-                    <div class="m-auto" style="width:250px; height:250px">
-                        <canvas class="m-2" id="pieChart"></canvas>
+                <section style='width: 80%' class="mx-auto">
+                    <p class="text-center text-white text-2xl">Metrics</p>
+                    <div class="flex flex-wrap">
+                        <div class="m-auto" style="width:250px; height:250px">
+                            <canvas class="m-2" id="pieChart"></canvas>
+                        </div>
+                        <div class="m-auto" style="width:400px; height:200px">
+                            <canvas class="bg-white m-2" id="accuracyChart"></canvas>
+                        </div>
+                        <div class="m-auto" style="width:400px; height:200px">
+                            <canvas class="bg-white m-2" id="lossChart"></canvas>
+                        </div>
                     </div>
-                    <div class="m-auto" style="width:400px; height:200px">
-                        <canvas class="bg-white m-2" id="accuracyChart"></canvas>
-                    </div>
-                    <div class="m-auto" style="width:400px; height:200px">
-                        <canvas class="bg-white m-2" id="lossChart"></canvas>
-                    </div>
-                </div>
+                </section>
+
 
                 {/* Affichage des mauvaise prrédictions  */}
-                <p class="text-center text-white text-2xl">Mauvaises prédictions</p>
-                <div class="grid grid-cols-3 mx-auto">
-                    <BadPredictionCard url="https://assets.afcdn.com/recipe/20210514/120317_w1024h1024c1cx1060cy707.jpg" reelleClasse="Pizza" prediction="Tacos"/>
-                    <BadPredictionCard url="https://assets.afcdn.com/recipe/20130627/42230_w1024h1024c1cx1250cy1875.jpg" reelleClasse="Hamburger" prediction="Pizza"/>
-                    <BadPredictionCard url="https://img.cuisineaz.com/660x660/2019/04/17/i146583-tacos-poulet-curry.jpeg" reelleClasse="Tacos" prediction="Hamburger"/>
-                </div>
+                <section class="w-2/4 mx-auto my-3">
+                    <p class="text-center text-white text-2xl">Mauvaises prédictions</p>
+                    <div class="flex felx-wrap justify-center mx-auto">
+                        <BadPredictionCard url="https://assets.afcdn.com/recipe/20210514/120317_w1024h1024c1cx1060cy707.jpg" reelleClasse="Pizza" prediction="Tacos"/>
+                        <BadPredictionCard url="https://assets.afcdn.com/recipe/20130627/42230_w1024h1024c1cx1250cy1875.jpg" reelleClasse="Hamburger" prediction="Pizza"/>
+                        <BadPredictionCard url="https://img.cuisineaz.com/660x660/2019/04/17/i146583-tacos-poulet-curry.jpeg" reelleClasse="Tacos" prediction="Hamburger"/>
+                    </div>
+                </section>
+
 
                 {/* Affichage des paramètres */}
-                <p class="text-center text-white text-2xl">Paramètres</p>
-                <div class="flex flex-col mx-auto">
-                    <div class="relative w-96 h-6 border-b-2 border-white">
-                        <div class="absolute left-0 text-white">Learning-rate</div>
-                        <div class="absolute right-0 text-white">0.001</div>
-                    </div>
-                    <div class="relative  w-96 h-6 border-b-2 border-white">
-                        <div class="absolute left-0 text-white">Dropout</div>
-                        <div class="absolute right-0 text-white">0.4</div>
-                    </div>
-                    <div class="relative  w-96 h-6 border-b-2 border-white">
-                        <div class="absolute left-0 text-white">Époques</div>
-                        <div class="absolute right-0 text-white">18</div>
-                    </div>
-                </div>
-
-                {/* Affichage classes prédites */}
-                <p class="text-center text-white text-2xl my-3">Classes prédites</p>  
-                <div class="flex flex-wrap w-96 mx-auto">
-                    <ClassCard class="Tacos" number="1000"/>
-                    <ClassCard class="Hamburger" number="1000"/>
-                    <ClassCard class="Pizza" number="1000"/>
-                </div>
-
-                {/* Affichage boutton entrainement */}
-                <div class="flex justify-center mt-10">
-                    <a type="button" class="flex w-28 h-10 rounded-2xl bg-[#7D6ADE]" href="/entrainement">
-                        <div class="text-white m-auto">
-                            Entrainement
+                <section class="w-full my-full">
+                    <p class="text-center text-white text-2xl">Paramètres</p>
+                    <div class="flex justify-center flex-wrap w-96 m-auto">
+                        <div class="relative w-full h-6 border-b-2 border-white">
+                            <div class="absolute left-0 text-white">Learning-rate</div>
+                            <div class="absolute right-0 text-white">0.001</div>
                         </div>
-                    </a>
-                </div>
+                        <div class="relative  w-full h-6 border-b-2 border-white">
+                            <div class="absolute left-0 text-white">Dropout</div>
+                            <div class="absolute right-0 text-white">0.4</div>
+                        </div>
+                        <div class="relative  w-full h-6 border-b-2 border-white">
+                            <div class="absolute left-0 text-white">Époques</div>
+                            <div class="absolute right-0 text-white">18</div>
+                        </div>
+                    </div>                    
+                </section>
+                
+                {/* Affichage classes prédites */}
+                <section>
+                    <p class="text-center text-white text-2xl my-3">Classes prédites</p>  
+                    <div class="flex flex-wrap w-96 mx-auto">
+                        <ClassCard class="Tacos" number="1000"/>
+                        <ClassCard class="Hamburger" number="1000"/>
+                        <ClassCard class="Pizza" number="1000"/>
+                    </div>
+                </section>
+                
+                {/* Affichage boutton entrainement */}
+                <section>
+                    <div class="flex justify-center mt-10">
+                        <a type="button" class="flex w-28 h-10 rounded bg-[#7D6ADE]" href="/entrainement">
+                            <div class="text-white m-auto">
+                                Entrainement
+                            </div>
+                        </a>
+                    </div>                    
+                </section>
+                
             </div>
         </main>
     )

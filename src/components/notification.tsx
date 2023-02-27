@@ -3,8 +3,10 @@ import { removeNotif } from "~/store/signaux"
 export default function Notification(props: any){
 
     const close = () => {
-        console.log('remove', props.notif.id)
-        document.getElementById('alert' + props.notif.id)?.remove()
+        // document.getElementById('alert' + props.notif.id)?.remove()
+        // te.Alert.getInstance().close();
+        (new te.Alert(document.getElementById("alert" + props.notif.id))).hide()
+        
         removeNotif(props.notif.id)
     }
 

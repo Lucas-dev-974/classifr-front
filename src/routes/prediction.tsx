@@ -1,6 +1,8 @@
 import { createSignal, For, Show } from "solid-js";
 import SelectModel from "~/components/select_model";
 import { pushNotif } from "~/store/signaux";
+import { Formater, request } from "~/services";
+import { selectedModel } from "~/store/signaux";
 
 export default function Prediction() {
     var file: File;
@@ -9,22 +11,23 @@ export default function Prediction() {
 
     const [on, setOn] = createSignal('predict')
 
-    const predict = () =>{
+    const predict = async () =>{
       if(file === null){
-        pushNotif({
-          message: 'Désoler veuillez sélectionner une image avant de faire une prédiction !'
-        })
-      }else{
-        let lbl_prediction = document.getElementById('prediction_label')
-        lbl_prediction!.innerHTML = 'Le résultat de la prédiction'
-        setOn('predicted')
+        pushNotif({message: 'Désoler veuillez sélectionner une image avant de faire une prédiction !'})
+
+        return false
       }
+
+      // const response = await request('api/predict', 'POST', Formater({model_id: selectedModel.id}))
+      
+      let lbl_prediction = document.getElementById('prediction_label')
+      lbl_prediction!.innerHTML = 'Le résultat de la prédiction'
+      setOn('predicted')
+      
     }
 
-    const badPrediction = () => {
-      setOn('badpredicted')
-    }
-     
+    const badPrediction = () => setOn('badpredicted')
+         
     const handleImage = (e: object) => {
       const reader = new FileReader()
       image_area = document.getElementById('selected_img') ?? document.createElement('div')
@@ -59,7 +62,9 @@ export default function Prediction() {
 
     }
 
-    
+    const getClasses = () => {
+      return []
+    }
     return (
       <main class="lg:container relative mx-auto">
         <section class="w-full"> {/** Selection modèle */}

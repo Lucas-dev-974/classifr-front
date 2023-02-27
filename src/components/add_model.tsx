@@ -1,6 +1,6 @@
 import { createSignal, onMount } from "solid-js"
 import { pushNotif } from "~/store/signaux";
-import { Formater } from "~/services";
+import { Formater, request } from "~/services";
 
 export default function AddModel(){
     const [modelName, setModelName] = createSignal('');
@@ -21,9 +21,13 @@ export default function AddModel(){
         }   
 
         const formdata = Formater({name: modelName(), file: file})
+        const response = await request('api/model/create', 'POST', formdata)
 
-        let response = await fetch('http://localhost:8000/api/model/create', { method: 'POST', body: formdat })
-        response     = await response.json()
+        if(response.status != 200){
+            pushNotif({message: 'Désoler une erreur est survenue lors de l\'import du modèle veuillez réesayer ultérieurement'})
+            return false
+        }
+        
         modal.hide()
     }
 
