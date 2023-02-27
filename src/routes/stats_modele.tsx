@@ -4,7 +4,7 @@
 // Faire un flex nowrap pour les images prédictions
 
 import { Chart } from "chart.js";
-import { onMount, createResource, For, createEffect, Switch, Match, createSignal } from "solid-js";
+import { onMount } from "solid-js";
 
 import SelectModel from "~/components/select_model";
 
@@ -16,10 +16,7 @@ Chart.register(...registerables);
 declare const window: any;
 
 export default function Stats_modele() {
-    // Test API
-    // const testApi = async () => (await fetch(`https://fr.wikipedia.org/w/api.php?action=query&titles=Terre&prop=extracts&exchars=500&explaintext&utf8&format=json`)).json();
-    // const [wiki] = createResource(testApi);
-    // console.log(wiki())
+
 
     // Fonction permettant la 1ere étape de l'update chart => la suppression
     function removeData(chart:any) {
