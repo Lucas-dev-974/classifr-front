@@ -1,12 +1,16 @@
-import { createSignal, onMount } from "solid-js"
-import { pushNotif } from "~/store/signaux";
+import { createSignal, For, onMount, Show } from "solid-js"
+import { pushNotif, trainClassesSelect } from "~/store/signaux";
 import { Formater, request } from "~/services";
+import { selectClasse } from "~/store/signaux";
 
 export default function AddModel(){
-    const [modelName, setModelName] = createSignal('');
+    const [classes] = request('api/classes', 'GET', null)
+
+    const [isTrainedModel, setIsTrainedModel] = createSignal(false) 
+    const [modelName,      setModelName]      = createSignal('');
 
     let file:  File;
-    var modal: any;
+    var modal: Object;
 
     // Récupère l'élément modal au montage du composant
     onMount(() =>  modal = new te.Modal(document.getElementById('add_model')) )
@@ -19,15 +23,14 @@ export default function AddModel(){
             pushNotif({ message: checkForm() })
             return false
         }   
-
-        const formdata = Formater({name: modelName(), file: file})
-        const response = await request('api/model/create', 'POST', formdata)
-
-        if(response.status != 200){
-            pushNotif({message: 'Désoler une erreur est survenue lors de l\'import du modèle veuillez réesayer ultérieurement'})
-            return false
-        }
         
+        let classes: Array<number> = []
+        trainClassesSelect.forEach((element: any) => classes.push(element.id) );
+
+        const formdata = Formater({name: modelName(), file: file, classes: [...classes]})
+        const [response] = request('api/model/create', 'POST', formdata)
+
+        console.log(response())
         modal.hide()
     }
 
@@ -70,6 +73,20 @@ export default function AddModel(){
                             <input type="text" class="rounded text-black min-h-[auto] w-full border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-1 text-sm font-normal  outline-none transition duration-300 ease-in-out file:-mx-3 hover:file:bg-neutral-200 focus:border-primary focus:bg-white" id="exampleFormControlInput1" placeholder="Nom du modèle" 
                             onKeyPress={(e) => setModelName(e.currentTarget.value)} value={modelName()}  />
                         </div>
+
+                        <div class="flex items-center my-2">
+                            <label for="trained_model?" class="mr-4">Modèle entrainer</label>
+                            <input id="trained_model?" type="checkbox" onclick={(e) => setIsTrainedModel(e.currentTarget.checked) }   class="mt-[0.15rem] mr-[6px]  h-[1.125rem] w-[1.155rem] appearance-none rounded-[0.25rem] border-[0.125rem] border-solid border-[rgba(0,0,0,0.25)] bg-white outline-none before:pointer-events-none before:absolute before:h-[0.875rem] before:w-[0.875rem] before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] checked:border-primary checked:bg-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:ml-[0.25rem] checked:after:-mt-px checked:after:block checked:after:h-[0.8125rem] checked:after:w-[0.375rem] checked:after:rotate-45 checked:after:border-[0.125rem] checked:after:border-t-0 checked:after:border-l-0 checked:after:border-solid checked:after:border-white checked:after:bg-transparent checked:after:content-[''] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-[0.875rem] focus:after:w-[0.875rem] focus:after:rounded-[0.125rem] focus:after:bg-white focus:after:content-[''] checked:focus:border-primary checked:focus:bg-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:after:ml-[0.25rem] checked:focus:after:-mt-px checked:focus:after:h-[0.8125rem] checked:focus:after:w-[0.375rem] checked:focus:after:rotate-45 checked:focus:after:rounded-none checked:focus:after:border-[0.125rem] checked:focus:after:border-t-0 checked:focus:after:border-l-0 checked:focus:after:border-solid checked:focus:after:border-white checked:focus:after:bg-transparent" />
+                        </div>
+                        
+                        <Show when={isTrainedModel()}>
+                            <For each={classes()}>{(classe, i) => 
+                                <div class="flex justify-around border-b py-2 ">
+                                    <p style="width: 150px">{classe.name}</p>
+                                    <input type="checkbox" onClick={selectClasse} value={JSON.stringify(classe)}   class="mt-[0.15rem] mr-[6px]  h-[1.125rem] w-[1.155rem] appearance-none rounded-[0.25rem] border-[0.125rem] border-solid border-[rgba(0,0,0,0.25)] bg-white outline-none before:pointer-events-none before:absolute before:h-[0.875rem] before:w-[0.875rem] before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] checked:border-primary checked:bg-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:ml-[0.25rem] checked:after:-mt-px checked:after:block checked:after:h-[0.8125rem] checked:after:w-[0.375rem] checked:after:rotate-45 checked:after:border-[0.125rem] checked:after:border-t-0 checked:after:border-l-0 checked:after:border-solid checked:after:border-white checked:after:bg-transparent checked:after:content-[''] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-[0.875rem] focus:after:w-[0.875rem] focus:after:rounded-[0.125rem] focus:after:bg-white focus:after:content-[''] checked:focus:border-primary checked:focus:bg-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:after:ml-[0.25rem] checked:focus:after:-mt-px checked:focus:after:h-[0.8125rem] checked:focus:after:w-[0.375rem] checked:focus:after:rotate-45 checked:focus:after:rounded-none checked:focus:after:border-[0.125rem] checked:focus:after:border-t-0 checked:focus:after:border-l-0 checked:focus:after:border-solid checked:focus:after:border-white checked:focus:after:bg-transparent" />
+                                </div>
+                            }</For>
+                        </Show>
                     </div>
                     <div class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md  p-4 dark:border-opacity-50">
                         <button onClick={addModel} type="button" class="w-full rounded bg-primary-100 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 "  data-te-ripple-init data-te-ripple-color="light">
