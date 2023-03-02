@@ -1,20 +1,15 @@
 // @refresh reload
-import { createSignal, For, onMount, Suspense } from "solid-js";
-import { useLocation, A, Body, ErrorBoundary, FileRoutes, Head, Html, Meta, Routes, Scripts, Title } from "solid-start";
+import { For, Suspense } from "solid-js";
+import { A, Body, ErrorBoundary, FileRoutes, Head, Html, Meta, Routes, Scripts, Title } from "solid-start";
 
 import "./root.css";
 // import 'tw-elements';
 
-import {user, setUser} from "./store/signaux";
 import Notification from "./components/notification";
 
-import { notifs, pushNotif } from "./store/signaux";
+import { notifs    } from "./store/signaux";
 
-export default function Root() {
-  onMount(() => {
-    // pushNotif({message: "test dynamique", color:"blue"})
-  })
-  
+export default function Root() {  
   return (
     <Html lang="en">
       <Head>
