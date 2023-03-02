@@ -1,14 +1,18 @@
-import { createResource, For } from "solid-js";
-import { models, setModels, setSelectedModel } from "~/store/signaux"
+import { createResource, createSignal, For } from "solid-js";
+import { request } from "~/services";
+import { setSelectedModel } from "~/store/signaux"
 
-const fetchModels = async () => (await fetch(`http://localhost:8000/api/models`)).json();
+const models_req = async () => (await request('api/model/all', 'GET', null)).json()
 
 export default function SelectModel(props: any){
-    const [_models] = createResource(fetchModels)
+    const [models, setModels] = createSignal()
+    const [_models] = createResource(models_req)
 
-    if (_models() !== undefined && _models() !== null) {
-      setModels(_models())
-    }
+
+    // const [_models] = request('api/model/all', 'GET', null)
+
+    if (_models() !== undefined && _models() !== null) setModels(_models())
+    
 
     const handleChange = (e: any) => {
       setSelectedModel(_models().filter((md:any) => md.id == e.target.value)[0])
