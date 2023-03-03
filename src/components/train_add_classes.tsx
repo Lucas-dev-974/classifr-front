@@ -1,26 +1,12 @@
-import { createResource, For } from "solid-js";
 import { trainClassesSelect, setTrainClassesSelect } from "~/store/signaux"
+import { createResource, For } from "solid-js";
+import { request } from "~/services";
+import { selectClasse } from "~/store/signaux";
 
-
-
-const fetchClasses = async () => (await fetch(`http://localhost:8000/api/classes`)).json();
+const fetchClasses = async () => (await request('api/classe/all', 'GET', null)).json()
 
 export default function ChooseClasses(){
-    const [classes] = createResource(fetchClasses);
-
-
-    /**
-     * Cette fonction as pour but de sélectionner/désélectionner une classes et l'ajouter au Store trainClassesSelect
-     * @param {event} classe
-     */
-    const selectClasse = (classe: any) => {
-        classe = JSON.parse(classe.target.value)
-        const classe_ever_selected = trainClassesSelect.map(clas => clas.id == classe.id).includes(true)
-        
-        if(classe_ever_selected) setTrainClassesSelect(trainClassesSelect.filter(clas => clas.id != classe.id))
-        else setTrainClassesSelect([...trainClassesSelect, classe])  
-    }
-
+    const [classes] = createResource(fetchClasses)
 
     return <>
         <button type="button"  data-te-toggle="modal" data-te-target="#select_classes_to_train"  >
