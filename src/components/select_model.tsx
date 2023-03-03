@@ -1,7 +1,9 @@
 import { createResource, For } from "solid-js";
 import { models, setModels, setSelectedModel } from "~/store/signaux"
 
-const fetchModels = async () => (await fetch(`http://localhost:8000/api/models`)).json();
+// const authenticationToken = localStorage.getItem("token")
+
+const fetchModels = async () => (await fetch(`http://localhost:8000/api/models`, { method: "GET"})).json();
 
 export default function SelectModel(props: any){
     const [_models] = createResource(fetchModels)
