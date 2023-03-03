@@ -1,33 +1,51 @@
-import { createSignal, For, Show } from "solid-js";
+import { createEffect, createResource, createSignal, For, Show } from "solid-js";
 import SelectModel from "~/components/select_model";
 import { pushNotif } from "~/store/signaux";
 import { Formater, request } from "~/services";
 import { selectedModel } from "~/store/signaux";
 
+
+const fetchPrediction = async (data:any) => (await request('api/model/predict', 'POST', data)).json()
+const fGetClasses     = async () => (await request('api/classe/all', 'GET', null)).json()
+const fBadPrediction  = async (data:any) => (await request('api/model/feedback    ', 'POST', data)).json()
+
 export default function Prediction() {
-    var file: File;
+    const [predictionData, setPrediction] = createSignal()
+    const [preds] = createResource(predictionData, fetchPrediction)
+
+    const [classes] = createResource(fGetClasses)
+
+    const [badPredict, setBadPredict] = createSignal()
+    const [badPredResource] = createResource(badPredict, fBadPrediction)
+
+    var file:       any;
     var image_area: HTMLElement;
-    var img_before: HTMLElement;
+    var img_before: string;
+    var [predictionTxt, setPredictionTxt] = createSignal('');
 
     const [on, setOn] = createSignal('predict')
 
     const predict = async () =>{
-      if(file === null){
-        pushNotif({message: 'Désoler veuillez sélectionner une image avant de faire une prédiction !'})
-
+      if(selectedModel.id == undefined){
+        pushNotif({message: 'Veuillez sélectionner un modèle avant de lancer la prédiction !'})
         return false
       }
+      if(file === null || !file){
+        pushNotif({message: 'Désoler veuillez sélectionner une image avant de faire une prédiction !'});
+        return false;
+      }
+      
+      setPrediction(Formater({model_id: selectedModel.id, img: file, filename: file.name}))
+      
+      createEffect(() => {
+        setPredictionTxt(preds()  != undefined ? preds().prediction : '...')
+      })
 
-      // const response = await request('api/predict', 'POST', Formater({model_id: selectedModel.id}))
-      
-      let lbl_prediction = document.getElementById('prediction_label')
-      lbl_prediction!.innerHTML = 'Le résultat de la prédiction'
       setOn('predicted')
-      
     }
 
     const badPrediction = () => setOn('badpredicted')
-         
+        
     const handleImage = (e: object) => {
       const reader = new FileReader()
       image_area = document.getElementById('selected_img') ?? document.createElement('div')
@@ -37,7 +55,7 @@ export default function Prediction() {
         image_area!.innerHTML = ''
         const image = new Image()
 
-        image.src = reader.result
+        image.src = reader.result?.toString()
         image_area.style.width = "100%"
         image_area.style.height = '100%'
         image_area.style.background = 'url(' + image.src + ')'
@@ -55,16 +73,19 @@ export default function Prediction() {
     }
 
     const nextPrediction = () => {
-      setOn('predict')
       file = null
       image_area.style.backgroundImage = ''
       image_area.innerHTML = img_before 
-
+      setOn('predict')
+      setPredictionTxt('')
     }
 
-    const getClasses = () => {
-      return []
+    const handleCategorie = (e:any) => {
+      console.log(e.target.value, preds().pred_id)
+      setBadPredict(Formater({pred_id: preds().pred_id, categorie_id: e.target.value}))
+      console.log(badPredResource())
     }
+
     return (
       <main class="lg:container relative mx-auto">
         <section class="w-full"> {/** Selection modèle */}
@@ -91,7 +112,9 @@ export default function Prediction() {
             </div>
 
             
-            <div id="prediction_label" class="text-center m-5 text-white"></div>
+            <div id="prediction_label" class="text-center m-5 text-white">
+              {predictionTxt()}
+            </div>
 
 
             <div class="w-full flex justify-center flex-wrap">
@@ -103,7 +126,7 @@ export default function Prediction() {
 
               <Show when={on() == 'predicted'}>
                 <div class="w-full flex justify-center">
-                  <button type="button" onClick={predict} class="w-64 justify-center text-white  bg-[#7D6ADE] font-medium rounded-lg text-sm px-5 py-2.5 mt-4">Bonne</button>
+                  <button type="button" onClick={nextPrediction} class="w-64 justify-center text-white  bg-[#7D6ADE] font-medium rounded-lg text-sm px-5 py-2.5 mt-4">Bonne</button>
                 </div>  
                 <div class="w-full flex justify-center">
                   <button type="button" onClick={badPrediction} class="w-64 justify-center text-white  bg-[#AE4141] font-medium rounded-lg text-sm px-5 py-2.5 mt-4">Mauvaise</button>
@@ -116,8 +139,8 @@ export default function Prediction() {
                 </div>
 
                 <div class="bg-[#7D6ADE] rounded-lg relative  flex flex-wrap justify-around" style='height: 134px; max-width: 600px; min-width: 250px'>
-                  <For each={getClasses()}>{(classe, i) => 
-                    <button type="button" class="w-40 h-10 justify-center text-white  bg-[#3A2798] font-medium rounded-lg text-sm  p-1 my-2 mx-3">{classe}</button>
+                  <For each={classes()}>{(classe, i) => 
+                    <button type="button" onclick={handleCategorie} value={classe.id} class="w-40 h-10 justify-center text-white  bg-[#3A2798] font-medium rounded-lg text-sm  p-1 my-2 mx-3">{classe.name}</button>
                   }</For>
                 </div>
               </Show>
