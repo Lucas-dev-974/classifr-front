@@ -6,6 +6,7 @@ specifiers:
   autoprefixer: ^10.4.13
   chart.js: ^4.2.1
   chartjs: ^0.3.24
+  jwt-decode: ^3.1.2
   postcss: ^8.4.21
   solid-js: ^1.6.11
   solid-start: ^0.2.21
@@ -21,6 +22,7 @@ dependencies:
   '@solidjs/router': 0.7.0_solid-js@1.6.11
   chart.js: 4.2.1
   chartjs: 0.3.24
+  jwt-decode: 3.1.2
   solid-js: 1.6.11
   solid-start: 0.2.21_6tbv3hhr7wlpclrfsxnrwdmhry
   tw-elements: 1.0.0-beta1_postcss@8.4.21
@@ -2380,6 +2382,10 @@ packages:
       universalify: 2.0.0
     optionalDependencies:
       graceful-fs: 4.2.10
+
+  /jwt-decode/3.1.2:
+    resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
+    dev: false
 
   /kolorist/1.7.0:
     resolution: {integrity: sha512-ymToLHqL02udwVdbkowNpzjFd6UzozMtshPQKVi5k1EjKRqKqBrOnE9QbLEb0/pV76SAiIT13hdL8R6suc+f3g==}

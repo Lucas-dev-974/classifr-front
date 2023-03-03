@@ -43,7 +43,7 @@ function actionLogin(response:any){
 }
 
 // loginRequest
-const fetchLogin = async (credentials:any) => (await request('api/login', "POST", credentials)).json().then(response=> actionLogin(response))
+const fetchLogin = async (credentials:any) => (await request('api/authentication/login', "POST", credentials)).json().then(response=> actionLogin(response))
 
 export default function Login() {
   // Contient les identifiants transformé

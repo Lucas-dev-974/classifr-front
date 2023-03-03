@@ -1,6 +1,5 @@
 // Page "Home"
 // <Show when fallback => ne fonctionne pas comme il le devrait
-import jwtDecode from "jwt-decode";
 import { onMount, createSignal, Show } from "solid-js";
 import { render } from "solid-js/web";
 import authenticationCheck from "~/components/authenticationCheck";
