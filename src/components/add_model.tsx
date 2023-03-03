@@ -1,10 +1,17 @@
-import { createSignal, For, onMount, Show } from "solid-js"
+import { createResource, createSignal, For, onMount, Show } from "solid-js"
 import { pushNotif, trainClassesSelect } from "~/store/signaux";
 import { Formater, request } from "~/services";
 import { selectClasse } from "~/store/signaux";
 
+const fetchClasses  = async () => (await request('api/classe/all', 'GET', null)).json()
+const fetchAddModel = async (formdata: any) => (await request('api/model/create', 'POST', formdata))
+
 export default function AddModel(){
-    const [classes] = request('api/classes', 'GET', null)
+    const [classes] = createResource(fetchClasses)
+    
+    const [modelData, setModelData] = createSignal()
+    const [model] = createResource(modelData, fetchAddModel)
+
 
     const [isTrainedModel, setIsTrainedModel] = createSignal(false) 
     const [modelName,      setModelName]      = createSignal('');
@@ -28,9 +35,11 @@ export default function AddModel(){
         trainClassesSelect.forEach((element: any) => classes.push(element.id) );
 
         const formdata = Formater({name: modelName(), file: file, classes: [...classes]})
-        const [response] = request('api/model/create', 'POST', formdata)
+        setModelData(formdata)
+        console.log(model())
+        // const [response] = request('api/model/create', 'POST', formdata)
 
-        console.log(response())
+        // console.log(response())
         modal.hide()
     }
 
